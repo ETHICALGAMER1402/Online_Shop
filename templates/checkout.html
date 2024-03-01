@@ -110,9 +110,30 @@
             // Loop through each item in the cart and display book name and download link
             cartItems.forEach(item => {
                 var listItem = document.createElement('li');
-                listItem.innerHTML = `<strong>Book name:</strong> ${item.name}<br><strong>Link:</strong> <a href="${item.downloadLink}" target="_blank">Download Now</a>`;
+                listItem.innerHTML = `<strong>Book name:</strong> ${item.name}<br><strong>Link:</strong> <a href="${getValidDriveLink(item.downloadLink)}" target="_blank">Download Now</a>`;
                 cartListElement.appendChild(listItem);
             });
+        }
+
+        // Function to get the valid Google Drive link
+        function getValidDriveLink(originalLink) {
+            // Check if the link is a Google Drive link
+            if (originalLink.includes('drive.google.com')) {
+                // Extract the file ID from the Google Drive link
+                var fileId = extractGoogleDriveFileId(originalLink);
+
+                // Construct the valid Google Drive link
+                return `https://drive.google.com/uc?id=${fileId}`;
+            }
+
+            // If not a Google Drive link, return the original link
+            return originalLink;
+        }
+
+        // Function to extract the file ID from a Google Drive link
+        function extractGoogleDriveFileId(link) {
+            var fileIdMatch = link.match(/\/d\/([^/]+)\//);
+            return fileIdMatch ? fileIdMatch[1] : null;
         }
 
         // Call the function to display cart items when the page loads
