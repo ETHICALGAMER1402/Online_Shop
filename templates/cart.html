@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: #3498db;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        #cartContainer {
+            width: 90%;
+            max-width: 1000px;
+            background: linear-gradient(to bottom, #ffffff, #f2f2f2);
+            padding: 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border-radius: 18px;
+            overflow: auto;
+            max-height: 800px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .cartItem {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .cartItem img {
+            max-width: 120px;
+            max-height: 120px;
+            object-fit: cover;
+            border-radius: 12px 0 0 12px;
+        }
+
+        .bookDetails {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .bookDetails h3 {
+            margin: 0 0 10px;
+            color: #2c3e50;
+            font-size: 1.5em;
+        }
+
+        .bookDetails p {
+            margin: 0;
+            color: #7f8c8d;
+            font-size: 1.2em;
+        }
+
+        .removeButton {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 0 12px 12px 0;
+            transition: background-color 0.3s;
+            font-size: 1em;
+        }
+
+        .removeButton:hover {
+            background-color: #c0392b;
+        }
+
+        .checkoutButton {
+            background-color: #000000;
+            color: #fff;
+            border: white;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 2em;
+            margin-top: 0px;
+            margin-bottom: 20px;
+        }
+
+        .checkoutButton:hover {
+            background-color: #27ae60;
+        }
+
+        a {
+            text-decoration: none;
+            color: #3498db;
+        }
+
+        /* Customize Section Colors */
+        body, h1 {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        #cartContainer {
+            background: linear-gradient(to bottom, #ffffff, #f2f2f2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .emptyCartMessage {
+            text-align: center;
+            color:black;
+            margin-top: 20px;
+            font-size: 2em;
+        }
+
+        #totalInfoContainer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #totalInfo {
+            font-size: 1.5em;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+
+
+<body>
+    <h1>Your Cart</h1>
+    <h2>Books will be provided through a PDF link after Payment.</h2>
+    <div id="cartContainer"></div>
+
+    <div class="emptyCartMessage" id="emptyCartMessage"></div>
+
+    <button class="checkoutButton" onclick="redirectToCheckout()">Checkout</button>
+
+    <div id="totalInfoContainer">
+        <p id="totalInfo"></p>
+    </div>
+
+    <script>
+        var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        var cartContainer = document.getElementById('cartContainer');
+        var emptyCartMessage = document.getElementById('emptyCartMessage');
+        var totalInfoContainer = document.getElementById('totalInfoContainer');
+        var totalInfoElement = document.getElementById('totalInfo');
+        var is_authenticated = true;
+
+        function displayCart() {
+            if (cartItems.length > 0) {
+                cartItems.forEach(function (item) {
+                    var cartItemDiv = document.createElement('div');
+                    cartItemDiv.classList.add('cartItem');
+
+                    var bookImage = document.createElement('img');
+                    bookImage.src = item.imgSrc;
+                    cartItemDiv.appendChild(bookImage);
+
+                    var bookDetailsDiv = document.createElement('div');
+                    bookDetailsDiv.classList.add('bookDetails');
+                    bookDetailsDiv.innerHTML = `
+                        <h3>${item.name}</h3>
+                        <p>Author: ${item.author}</p>
+                        <p>Price: ₹${item.price}</p>
+                    `;
+                    cartItemDiv.appendChild(bookDetailsDiv);
+
+                    var removeButton = document.createElement('button');
+                    removeButton.classList.add('removeButton');
+                    removeButton.innerHTML = 'Remove';
+                    removeButton.onclick = function () {
+                        removeItem(item.name);
+                    };
+                    cartItemDiv.appendChild(removeButton);
+
+                    cartContainer.appendChild(cartItemDiv);
+                });
+
+                // Display total information
+                updateTotalInfo();
+            } else {
+                emptyCartMessage.textContent = 'Your cart is empty.';
+            }
+        }
+
+        function updateTotalInfo() {
+            var totalInfo = calculateTotal();
+            totalInfoElement.innerHTML = `Total Items: ${totalInfo.totalItems} | Total Cost: ₹${totalInfo.totalCost}`;
+        }
+
+        function calculateTotal() {
+            var totalCost = 0;
+            var totalItems = cartItems.length;
+
+            cartItems.forEach(function (item) {
+                totalCost += item.price;
+            });
+
+            return { totalCost: totalCost, totalItems: totalItems };
+        }
+
+        function removeItem(bookName) {
+            cartItems = cartItems.filter(item => item.name !== bookName);
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            location.reload();
+        }
+
+        function redirectToCheckout() {
+            if (is_authenticated) {
+                // Replace this with your actual checkout URL
+                window.location.href = "{{ url_for('checkout') }}";
+            } else {
+                // Replace this with your actual login URL
+                window.location.href = "{{ url_for('login') }}";
+            }
+        }
+
+        // Call the displayCart function when the page loads
+        displayCart();
+    </script>
+</body>
+
+</html>

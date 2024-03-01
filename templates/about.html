@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic EBook Store</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #FF4081, #3F51B5); /* Gradient background for vibrancy */
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+
+        .nav-container {
+            background-color: #333;
+            overflow: hidden;
+            float: right;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 70px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s ease-in-out;
+        }
+
+        nav a:hover {
+            color: #FFD700; /* Change color on hover, adjust as needed */
+        }
+
+        .main-container {
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        h1 {
+            color: #FF4081; /* Pink heading color for vibrancy */
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        blockquote {
+            font-style: italic;
+            color: #FFD700; /* Gold color for the blockquote */
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+
+        .about-us {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            animation: fadeIn 1.5s ease-out; /* Fade-in animation */
+        }
+
+        .about-us h2 {
+            color: #3F51B5; /* Indigo heading color for vibrancy */
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .about-us p {
+            color: black; /* Gold color for paragraphs */
+            line-height: 1.6;
+            font-size: 1.3em;
+        }
+
+        .decorative-line {
+            width: 100px;
+            height: 2px;
+            background-color: #FF4081; /* Pink color for decorative line */
+            margin: 20px 0;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-container {
+                width: 90%;
+            }
+        }
+
+        /* Keyframe animation for fadeIn */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <nav>
+            <a href="{{url_for('home')}}">Home</a>
+            <a href="{{url_for('shop')}}">Shop</a>
+            <a href="#cart">Cart</a>
+            {% if current_user.is_authenticated %}
+                <a href="{{url_for('logout')}}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('register') }}">Register</a>
+            {% endif %}
+            <a href="{{ url_for('about') }}">About us</a>
+        </nav>
+    </div>
+
+    <div class="main-container">
+        <h1>Welcome to the Dynamic EBook Store</h1>
+
+        <blockquote>Igniting passion through the magic of books.</blockquote>
+
+        <div class="about-us">
+            <h2>About Us</h2>
+            <div class="decorative-line"></div>
+            <p>Welcome to Your Dynamic EBook Store, where the love for reading meets the excitement of online shopping. Our journey began with a passion for literature and a vision to create a platform that connects readers with their next favorite book.</p>
+
+            <p>At Your Dynamic EBook, we believe in the transformative power of books. Whether you seek knowledge, entertainment, or inspiration, our vivid collection caters to diverse tastes and interests. Every book is a gateway to new worlds, ideas, and experiences.</p>
+
+            <p>Our commitment goes beyond selling books; we strive to foster a community that celebrates the joy of reading. Through dynamic EBook recommendations, exclusive events, and a user-friendly platform, we aim to enhance your reading journey.</p>
+
+            <h2>Our Mission</h2>
+            <div class="decorative-line"></div>
+            <p>Our mission is to make quality literature accessible to everyone. We envision a world where every individual has the opportunity to explore the vast realm of written knowledge, discovering stories that resonate with their souls.</p>
+
+            <p>Join us on this lively literary adventure, and let's embark on a journey of discovery together. Because at Your Dynamic EBook, every page turns into a new chapter of possibilities.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Page</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #4c86a8, #6f4f8e);
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        li {
+            background: linear-gradient(to right, #e96443, #904e95);
+            border: 2px solid #fff;
+            margin: 20px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transition: transform 0.5s ease-in-out;
+            width: 400px;
+            overflow: hidden;
+            position: relative;
+            color: #fff;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        li:hover {
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        strong {
+            color: #ffd700;
+            font-size: 1.2em;
+        }
+
+        a {
+            display: inline-block;
+            background: linear-gradient(to right, #ffa17f, #00223e);
+            color: #fff;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            transition: background 0.3s ease-in-out;
+            font-size: 1.2em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        a:hover {
+            background: linear-gradient(to right, #00223e, #ffa17f);
+        }
+    </style>
+</head>
+<body>
+    <h1>Your <span>Exquisite</span> Cart</h1>
+    <ul id="cartList"></ul>
+
+    <script>
+        function displayCartItems() {
+            // Retrieve the cart items from localStorage
+            var storedCartItems = localStorage.getItem('cartItems');
+            var cartItems = storedCartItems ? JSON.parse(storedCartItems) : [];
+
+            // Get the element to display cart items
+            var cartListElement = document.getElementById('cartList');
+
+            // Loop through each item in the cart and display book name and download link
+            cartItems.forEach(item => {
+                var listItem = document.createElement('li');
+                listItem.innerHTML = `<strong>Book name:</strong> ${item.name}<br><strong>Link:</strong> <a href="${item.downloadLink}" target="_blank">Download Now</a>`;
+                cartListElement.appendChild(listItem);
+            });
+        }
+
+        // Call the function to display cart items when the page loads
+        displayCartItems();
+    </script>
+</body>
+</html>
