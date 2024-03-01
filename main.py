@@ -6,6 +6,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+import os
 
 app = Flask(__name__)
 bootstrap = Bootstrap5(app)
@@ -15,7 +16,7 @@ login_manager = LoginManager()
 login_manager.login_view = 'login'
 
 db = SQLAlchemy()
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI", "sqlite:///posts.db")
 db.init_app(app)
 login_manager.init_app(app)
 
